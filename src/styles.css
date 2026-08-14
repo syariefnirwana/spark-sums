@@ -132,13 +132,79 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* ---- Kali Kids design system ---------------------------------------- */
+:root {
+  --radius: 1.5rem;
+  --background: oklch(0.98 0.015 250);
+  --foreground: oklch(0.28 0.04 265);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.04 265);
+  --primary: oklch(0.72 0.16 255);
+  --primary-foreground: oklch(0.99 0.005 250);
+  --secondary: oklch(0.93 0.05 330);
+  --secondary-foreground: oklch(0.35 0.08 330);
+  --muted: oklch(0.95 0.02 250);
+  --muted-foreground: oklch(0.55 0.03 265);
+  --accent: oklch(0.88 0.11 195);
+  --accent-foreground: oklch(0.3 0.06 220);
+  --success: oklch(0.76 0.16 155);
+  --success-foreground: oklch(0.25 0.06 155);
+  --danger: oklch(0.7 0.18 20);
+  --danger-foreground: oklch(0.3 0.09 20);
+  --sunny: oklch(0.88 0.14 90);
+  --border: oklch(0.9 0.02 260);
+  --input: oklch(0.9 0.02 260);
+  --ring: oklch(0.72 0.16 255);
+
+  --glass-bg: color-mix(in oklab, white 55%, transparent);
+  --glass-border: color-mix(in oklab, white 70%, transparent);
+  --shadow-soft: 0 20px 60px -20px color-mix(in oklab, var(--primary) 45%, transparent);
+  --shadow-float: 0 30px 80px -30px color-mix(in oklab, var(--foreground) 40%, transparent);
+  --font-display: "Nunito", ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-sunny: var(--sunny);
+  --font-display: var(--font-display);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
   }
 
+  html,
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-image:
+      radial-gradient(60rem 40rem at 8% -10%, oklch(0.88 0.11 320 / 0.55), transparent 60%),
+      radial-gradient(50rem 38rem at 100% 0%, oklch(0.87 0.12 210 / 0.6), transparent 60%),
+      radial-gradient(55rem 45rem at 50% 115%, oklch(0.9 0.12 130 / 0.5), transparent 60%);
+    background-repeat: no-repeat;
   }
 }
+
+@utility glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-float);
+}
+
+@utility glass-soft {
+  background: color-mix(in oklab, white 38%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid color-mix(in oklab, white 55%, transparent);
+}
+
