@@ -163,15 +163,13 @@ export function GameSession({
           className="glass w-full max-w-xl rounded-[2.5rem] p-7 text-center sm:p-12"
         >
           <p className="text-sm font-bold text-muted-foreground">Berapa hasilnya?</p>
-          <motion.p
+          <p
             key={qid}
-            initial={{ y: 24, opacity: 0, scale: 0.9 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            transition={{ type: "spring", stiffness: 380, damping: 20 }}
-            className="my-5 text-5xl font-black tracking-tight sm:text-7xl"
+            className="animate-in fade-in zoom-in-90 slide-in-from-bottom-4 my-5 text-5xl font-black tracking-tight duration-300 ease-out sm:text-7xl"
           >
             {multiplier} × {factor}
-          </motion.p>
+          </p>
+
 
 
           <motion.div
