@@ -18,6 +18,18 @@ export async function fetchHistory(): Promise<StudySession[]> {
   return (data ?? []) as StudySession[];
 }
 
+export async function fetchBestScore(multiplier: number, duration_minutes: number): Promise<number> {
+  const { data, error } = await supabase
+    .from("study_history")
+    .select("total_solved")
+    .eq("multiplier", multiplier)
+    .eq("duration_minutes", duration_minutes)
+    .order("total_solved", { ascending: false })
+    .limit(1);
+  if (error) throw error;
+  return data?.[0]?.total_solved ?? 0;
+}
+
 export async function saveSession(input: {
   multiplier: number;
   duration_minutes: number;
@@ -26,3 +38,4 @@ export async function saveSession(input: {
   const { error } = await supabase.from("study_history").insert(input);
   if (error) throw error;
 }
+
