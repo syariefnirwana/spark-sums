@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { Check, Home, Loader2, Sparkles, Timer, Trophy, Volume2, VolumeX, X } from "lucide-react";
+import { Check, Crown, Home, Loader2, Sparkles, Timer, Trophy, Volume2, VolumeX, X } from "lucide-react";
 import { GlassButton } from "./GlassButton";
 import { playError, playFinish, playSuccess } from "@/lib/sound";
-import { saveSession } from "@/lib/history";
+import { startMusic, stopMusic } from "@/lib/music";
+import { fetchBestScore, saveSession } from "@/lib/history";
 import { cn } from "@/lib/utils";
+
 
 type Status = "idle" | "correct" | "wrong";
 
@@ -39,6 +41,7 @@ export function GameSession({
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
+  const [bestScore, setBestScore] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const savedRef = useRef(false);
   const scoreRef = useRef(0);
@@ -56,6 +59,30 @@ export function GameSession({
       if (document.fullscreenElement) void document.exitFullscreen().catch(() => {});
     };
   }, []);
+
+  // Previous best score for this table + duration.
+  useEffect(() => {
+    let alive = true;
+    fetchBestScore(multiplier, minutes)
+      .then((best) => {
+        if (alive) setBestScore(best);
+      })
+      .catch(() => {
+        if (alive) setBestScore(0);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [multiplier, minutes]);
+
+  // Background music while the session runs.
+  useEffect(() => {
+    if (!muted && !finished) startMusic();
+    else stopMusic();
+  }, [muted, finished]);
+
+  useEffect(() => () => stopMusic(), []);
+
 
   const persist = useCallback(async () => {
     if (savedRef.current) return;
@@ -126,6 +153,11 @@ export function GameSession({
           <Sparkles className="h-4 w-4 text-sunny" />
           {score}
         </div>
+        <div className="glass hidden items-center gap-2 rounded-full px-4 py-2 font-extrabold tabular-nums sm:flex">
+          <Crown className="h-4 w-4 text-sunny" />
+          {bestScore ?? "–"}
+        </div>
+
         <div className="flex items-center gap-2">
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -249,8 +281,24 @@ export function GameSession({
                   <div className="glass-soft rounded-2xl px-5 py-4 text-left">
                     <p className="text-xs text-muted-foreground">Durasi</p>
                     <p className="text-xl font-extrabold">{minutes} menit</p>
-                  </div>
                 </div>
+                <div className="glass-soft flex items-center justify-between rounded-2xl px-5 py-4 text-left">
+                  <div>
+                    <p className="text-xs text-muted-foreground">High Score</p>
+                    <p className="text-xl font-extrabold">
+                      {Math.max(score, bestScore ?? 0)} soal
+                    </p>
+                  </div>
+                  {bestScore !== null && score > bestScore ? (
+                    <span className="rounded-full bg-sunny/40 px-3 py-1 text-xs font-extrabold">
+                      Rekor Baru! 🎉
+                    </span>
+                  ) : (
+                    <Crown className="h-6 w-6 text-sunny" />
+                  )}
+                </div>
+              </div>
+
               </div>
 
               <p className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
