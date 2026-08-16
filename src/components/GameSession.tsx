@@ -281,8 +281,24 @@ export function GameSession({
                   <div className="glass-soft rounded-2xl px-5 py-4 text-left">
                     <p className="text-xs text-muted-foreground">Durasi</p>
                     <p className="text-xl font-extrabold">{minutes} menit</p>
-                  </div>
                 </div>
+                <div className="glass-soft flex items-center justify-between rounded-2xl px-5 py-4 text-left">
+                  <div>
+                    <p className="text-xs text-muted-foreground">High Score</p>
+                    <p className="text-xl font-extrabold">
+                      {Math.max(score, bestScore ?? 0)} soal
+                    </p>
+                  </div>
+                  {bestScore !== null && score > bestScore ? (
+                    <span className="rounded-full bg-sunny/40 px-3 py-1 text-xs font-extrabold">
+                      Rekor Baru! 🎉
+                    </span>
+                  ) : (
+                    <Crown className="h-6 w-6 text-sunny" />
+                  )}
+                </div>
+              </div>
+
               </div>
 
               <p className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
