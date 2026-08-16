@@ -41,6 +41,7 @@ export function GameSession({
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
+  const [bestScore, setBestScore] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const savedRef = useRef(false);
   const scoreRef = useRef(0);
@@ -58,6 +59,30 @@ export function GameSession({
       if (document.fullscreenElement) void document.exitFullscreen().catch(() => {});
     };
   }, []);
+
+  // Previous best score for this table + duration.
+  useEffect(() => {
+    let alive = true;
+    fetchBestScore(multiplier, minutes)
+      .then((best) => {
+        if (alive) setBestScore(best);
+      })
+      .catch(() => {
+        if (alive) setBestScore(0);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [multiplier, minutes]);
+
+  // Background music while the session runs.
+  useEffect(() => {
+    if (!muted && !finished) startMusic();
+    else stopMusic();
+  }, [muted, finished]);
+
+  useEffect(() => () => stopMusic(), []);
+
 
   const persist = useCallback(async () => {
     if (savedRef.current) return;
