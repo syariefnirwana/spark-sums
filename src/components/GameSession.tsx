@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { Check, Home, Loader2, Sparkles, Timer, Trophy, Volume2, VolumeX, X } from "lucide-react";
+import { Check, Crown, Home, Loader2, Sparkles, Timer, Trophy, Volume2, VolumeX, X } from "lucide-react";
 import { GlassButton } from "./GlassButton";
 import { playError, playFinish, playSuccess } from "@/lib/sound";
-import { saveSession } from "@/lib/history";
+import { startMusic, stopMusic } from "@/lib/music";
+import { fetchBestScore, saveSession } from "@/lib/history";
 import { cn } from "@/lib/utils";
+
 
 type Status = "idle" | "correct" | "wrong";
 
