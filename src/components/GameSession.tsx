@@ -153,6 +153,11 @@ export function GameSession({
           <Sparkles className="h-4 w-4 text-sunny" />
           {score}
         </div>
+        <div className="glass hidden items-center gap-2 rounded-full px-4 py-2 font-extrabold tabular-nums sm:flex">
+          <Crown className="h-4 w-4 text-sunny" />
+          {bestScore ?? "–"}
+        </div>
+
         <div className="flex items-center gap-2">
           <motion.button
             whileTap={{ scale: 0.9 }}
